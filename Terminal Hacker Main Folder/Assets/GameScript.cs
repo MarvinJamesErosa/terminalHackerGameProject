@@ -1,16 +1,22 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 
 public class GameScript : MonoBehaviour
 {
-    enum Screen { NameSelect, MainMenu, LocalLibraryLevel}
+    enum Screen { NameSelect, MainMenu, LocalLibraryLevel} // To indicate what level are we on
     Screen currentScreen;
-    string userName;
-    string[] arrayUsed;
-    int arrayUsedLen;
+    string userName; // To store the user's name
+    string[] arrayUsed; // To indicate what set of words to choose from
+    int arrayUsedLen; // To get the length of the set for max random
+    string selectedWord; // To store the selected word
+    string scrambledWord; //  To store the scrambled word
+
+    // Word Set for each level
     string[] library = { "books", "pencil", "librarian" };
 
     void Start()
@@ -28,12 +34,14 @@ public class GameScript : MonoBehaviour
     {
         currentScreen = Screen.MainMenu;
         Terminal.ClearScreen();
-        Terminal.WriteLine("Hello " + name + ",");
+        Terminal.WriteLine("Hello " + userName + ",");
         Terminal.WriteLine("What would you like to hack into?");
         Terminal.WriteLine("Press 1 for the local library");
         Terminal.WriteLine("Press 2 for the local police station");
         Terminal.WriteLine("Press 3 for NASA");
     }
+
+    // For getting user input
     void OnUserInput(string input)
     {
         if (currentScreen == Screen.NameSelect)
@@ -52,21 +60,45 @@ public class GameScript : MonoBehaviour
             ShowMainMenu();
         }
     }
+
+    // To randomly select the word from the chosen set
     void WordSelection()
     {
         System.Random rd = new System.Random();
-        int word = rd.Next(0, arrayUsedLen);
-        Terminal.WriteLine("Password: " + arrayUsed[word]);
+        int word = rd.Next(0, arrayUsedLen - 1);
+        selectedWord = arrayUsed[word];
     }
+
+    // To scramble the selected word
+    void WordScrambler()
+    {
+        WordSelection();
+        char[] chars = selectedWord.ToCharArray();
+        System.Random rd = new System.Random();
+
+        for (int index = 0; index < chars.Length; index++)
+        {
+            int randomPos = rd.Next(chars.Length);
+            char temp = chars[index];
+            chars[index] = chars[randomPos];
+            chars[randomPos] = temp;
+        }
+
+        scrambledWord = new string(chars);
+    }
+
+    // Each Level Functions
     void LocalLibrary()
     {
         currentScreen = Screen.LocalLibraryLevel;
         arrayUsed = library;
         arrayUsedLen = library.Length;
+
+        WordScrambler();
+
         Terminal.ClearScreen();
         Terminal.WriteLine("Level 1 - Local Library");
-        WordSelection();
-
+        Terminal.WriteLine("Password: " + scrambledWord);
     }
     
     
