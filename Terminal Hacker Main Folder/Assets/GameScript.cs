@@ -8,7 +8,7 @@ public class GameScript : MonoBehaviour
 {
     enum Screen { NameSelect, MainMenu, LocalLibraryLevel}
     Screen currentScreen;
-    string name;
+    string userName;
     string[] arrayUsed;
     int arrayUsedLen;
     string[] library = { "books", "pencil", "librarian" };
@@ -38,7 +38,7 @@ public class GameScript : MonoBehaviour
     {
         if (currentScreen == Screen.NameSelect)
         {
-            name = input;
+            userName = input;
             ShowMainMenu();
         }
 
