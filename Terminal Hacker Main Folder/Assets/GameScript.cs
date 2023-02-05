@@ -59,6 +59,10 @@ public class GameScript : MonoBehaviour
         {
             ShowMainMenu();
         }
+        else if ((currentScreen == Screen.LocalLibraryLevel))
+        {
+            showWinScreen(input);
+        }
     }
 
     // To randomly select the word from the chosen set
@@ -87,6 +91,20 @@ public class GameScript : MonoBehaviour
         scrambledWord = new string(chars);
     }
 
+    void showWinScreen(string answer)
+    {
+        if (answer == selectedWord)
+        {
+            Terminal.ClearScreen();
+            Terminal.WriteLine("Congrats");
+        }
+        else
+        {
+            LocalLibrary();
+        }
+        
+    }
+
     // Each Level Functions
     void LocalLibrary()
     {
@@ -99,6 +117,8 @@ public class GameScript : MonoBehaviour
         Terminal.ClearScreen();
         Terminal.WriteLine("Level 1 - Local Library");
         Terminal.WriteLine("Password: " + scrambledWord);
+        
+     
     }
     
     
