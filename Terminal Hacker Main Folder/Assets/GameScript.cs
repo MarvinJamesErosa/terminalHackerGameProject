@@ -8,7 +8,7 @@ using UnityEngine;
 
 public class GameScript : MonoBehaviour
 {
-    enum Screen { NameSelect, MainMenu, LocalLibraryLevel} // To indicate what level are we on
+    enum Screen { NameSelect, MainMenu, LocalLibraryLevel, LocalPoliceStation, NASA } // To indicate what level are we on
     Screen currentScreen;
     string userName; // To store the user's name
     string[] arrayUsed; // To indicate what set of words to choose from
@@ -17,17 +17,19 @@ public class GameScript : MonoBehaviour
     string scrambledWord; //  To store the scrambled word
 
     // Word Set for each level
-    string[] library = { "books", "pencil", "librarian" };
+    string[] library = { "books", "aisle", "shelf", "password", "font", "borrow" };
+    string[] police = { "prisoner", "handcuffs", "holster", "uniform", "arrest" };
+    string[] nasa = { "starfield", "telescope", "environment", "exploration", "astronauts" };
 
     void Start()
     {
         currentScreen = Screen.NameSelect;
         AskUserName();
     }
-    
+
     void AskUserName()
     {
-        Terminal.WriteLine("What do you want to be called:"); 
+        Terminal.WriteLine("What do you want to be called:");
     }
 
     void ShowMainMenu()
@@ -55,11 +57,21 @@ public class GameScript : MonoBehaviour
             LocalLibrary();
         }
 
+        else if (input == "2" & currentScreen == Screen.MainMenu)
+        {
+            LocalPoliceStation();
+        }
+
+        else if (input == "3" & currentScreen == Screen.MainMenu)
+        {
+            NASA();
+        }
+
         else if (input == "menu")
         {
             ShowMainMenu();
         }
-        else if ((currentScreen == Screen.LocalLibraryLevel))
+        else if (!(currentScreen == Screen.MainMenu) || !(currentScreen == Screen.NameSelect))
         {
             showWinScreen(input);
         }
@@ -100,11 +112,24 @@ public class GameScript : MonoBehaviour
         }
         else
         {
-            LocalLibrary();
+            string level = null;
+            if (currentScreen == Screen.LocalLibraryLevel)
+            {
+                level = "Level 1 - Local Library";
+            }
+            else if (currentScreen == Screen.LocalPoliceStation)
+            {
+                level = "Level 2 - Local Police Station";
+            }
+            else if (currentScreen == Screen.NASA)
+            {
+                level = "Level 3 - NASA";
+            }
+            Terminal.ClearScreen();
+            Terminal.WriteLine(level);
+            Terminal.WriteLine("Password: " + scrambledWord);
         }
-        
     }
-
     // Each Level Functions
     void LocalLibrary()
     {
@@ -117,9 +142,32 @@ public class GameScript : MonoBehaviour
         Terminal.ClearScreen();
         Terminal.WriteLine("Level 1 - Local Library");
         Terminal.WriteLine("Password: " + scrambledWord);
-        
-     
     }
-    
-    
+
+    void LocalPoliceStation()
+    {
+        currentScreen = Screen.LocalPoliceStation;
+        arrayUsed = police;
+        arrayUsedLen = police.Length;
+
+        WordScrambler();
+
+        Terminal.ClearScreen();
+        Terminal.WriteLine("Level 2 - Local Police Station");
+        Terminal.WriteLine("Password: " + scrambledWord);
+    }
+
+    void NASA()
+    {
+        currentScreen = Screen.NASA;
+        arrayUsed = nasa;
+        arrayUsedLen = nasa.Length;
+
+        WordScrambler();
+
+        Terminal.ClearScreen();
+        Terminal.WriteLine("Level 3 - NASA");
+        Terminal.WriteLine("Password: " + scrambledWord);
+    }
+
 }
