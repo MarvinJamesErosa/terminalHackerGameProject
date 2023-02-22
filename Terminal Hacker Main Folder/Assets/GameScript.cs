@@ -8,7 +8,7 @@ using UnityEngine;
 
 public class GameScript : MonoBehaviour
 {
-    enum Screen { NameSelect, MainMenu, LocalLibraryLevel, LocalPoliceStation, NASA } // To indicate what level are we on
+    enum Screen { NameSelect, MainMenu, University, Corporate, NatDef } // To indicate what level are we on
     Screen currentScreen;
     string userName; // To store the user's name
     string[] arrayUsed; // To indicate what set of words to choose from
@@ -17,9 +17,9 @@ public class GameScript : MonoBehaviour
     string scrambledWord; //  To store the scrambled word
 
     // Word Set for each level
-    string[] library = { "books", "aisle", "shelf", "password", "font", "borrow" };
-    string[] police = { "prisoner", "handcuffs", "holster", "uniform", "arrest" };
-    string[] nasa = { "starfield", "telescope", "environment", "exploration", "astronauts" };
+    string[] university = { "exam", "dean", "book", "Class" };
+    string[] corporate = { "", "handcuffs", "holster", "uniform", "arrest" };
+    string[] natdef = { "missile", "weapons", "general", "exploration", "astronauts" };
 
     void Start()
     {
@@ -37,10 +37,14 @@ public class GameScript : MonoBehaviour
         currentScreen = Screen.MainMenu;
         Terminal.ClearScreen();
         Terminal.WriteLine("Hello " + userName + ",");
+        Terminal.WriteLine("");
         Terminal.WriteLine("What would you like to hack into?");
-        Terminal.WriteLine("Press 1 for the local library");
-        Terminal.WriteLine("Press 2 for the local police station");
-        Terminal.WriteLine("Press 3 for NASA");
+        Terminal.WriteLine("Press 1 for Blarvard University");
+        Terminal.WriteLine("Press 2 for Shmapple Inc.");
+        Terminal.WriteLine("Press 3 for Deparment of Defences");
+        Terminal.WriteLine("Type \"close\" to close the application");
+        Terminal.WriteLine("");
+        Terminal.WriteLine("Enter your Selection:");
     }
 
     // For getting user input
@@ -54,12 +58,12 @@ public class GameScript : MonoBehaviour
 
         else if (input == "1" & currentScreen == Screen.MainMenu)
         {
-            LocalLibrary();
+            University();
         }
 
         else if (input == "2" & currentScreen == Screen.MainMenu)
         {
-            LocalPoliceStation();
+           Corporate();
         }
 
         else if (input == "3" & currentScreen == Screen.MainMenu)
@@ -71,9 +75,19 @@ public class GameScript : MonoBehaviour
         {
             ShowMainMenu();
         }
+        else if (input == "close")
+        {
+            Debug.Log("close pc");
+            Application.Quit();
+        }
+         else if(currentScreen == Screen.MainMenu & !(input == "secret")) 
+        {
+            ShowMainMenu();
+            Terminal.WriteLine("Invalid input. Please try again.");
+        }
         else if (!(currentScreen == Screen.MainMenu) || !(currentScreen == Screen.NameSelect))
         {
-            showWinScreen(input);
+            ShowWinScreen(input);
         }
     }
 
@@ -103,71 +117,80 @@ public class GameScript : MonoBehaviour
         scrambledWord = new string(chars);
     }
 
-    void showWinScreen(string answer)
+    void ShowWinScreen(string answer)
     {
         if (answer == selectedWord)
         {
             Terminal.ClearScreen();
-            Terminal.WriteLine("Congrats");
+            Terminal.WriteLine("Congrats on beating the terminal hackergame! Your coding and logical skills areimpressive, and your dedication has paidoff. Keep up the great work and may you continue to succeed in all your future  endeavors. Well done!");
+            Terminal.WriteLine("");
+            Terminal.WriteLine("Type \"menu\" to go back");
         }
         else
         {
             string level = null;
-            if (currentScreen == Screen.LocalLibraryLevel)
+            if (currentScreen == Screen.University)
             {
-                level = "Level 1 - Local Library";
+                level = "Level 1 - Blarvard University";
+                Terminal.ClearScreen();
+                Terminal.WriteLine(level);
+                Terminal.WriteLine("Clue: " + scrambledWord);
             }
-            else if (currentScreen == Screen.LocalPoliceStation)
+            else if (currentScreen == Screen.Corporate)
             {
-                level = "Level 2 - Local Police Station";
+                level = "Level 2 - Shmapple Inc.";
+                Terminal.ClearScreen();
+                Terminal.WriteLine(level);
+                Terminal.WriteLine("Clue: " + scrambledWord);
             }
-            else if (currentScreen == Screen.NASA)
+            else if (currentScreen == Screen.NatDef)
             {
-                level = "Level 3 - NASA";
+                level = "Level 3 - Department of Defences";
+                Terminal.ClearScreen();
+                Terminal.WriteLine(level);
+                Terminal.WriteLine("Clue: " + scrambledWord);
             }
-            Terminal.ClearScreen();
-            Terminal.WriteLine(level);
-            Terminal.WriteLine("Password: " + scrambledWord);
+            
         }
     }
     // Each Level Functions
-    void LocalLibrary()
+    void University()
     {
-        currentScreen = Screen.LocalLibraryLevel;
-        arrayUsed = library;
-        arrayUsedLen = library.Length;
+        currentScreen = Screen.University;
+        arrayUsed = university;
+        arrayUsedLen = university.Length;
 
         WordScrambler();
 
         Terminal.ClearScreen();
-        Terminal.WriteLine("Level 1 - Local Library");
-        Terminal.WriteLine("Password: " + scrambledWord);
+        Terminal.WriteLine("Level 1 - Blarvard University");
+        Terminal.WriteLine("Clue: " + scrambledWord);
     }
 
-    void LocalPoliceStation()
+    void Corporate()
     {
-        currentScreen = Screen.LocalPoliceStation;
-        arrayUsed = police;
-        arrayUsedLen = police.Length;
+        currentScreen = Screen.Corporate;
+        arrayUsed = corporate;
+        arrayUsedLen = corporate.Length;
 
         WordScrambler();
 
         Terminal.ClearScreen();
-        Terminal.WriteLine("Level 2 - Local Police Station");
-        Terminal.WriteLine("Password: " + scrambledWord);
+        Terminal.WriteLine("Level 2 - Shmapple Inc.");
+        Terminal.WriteLine("Clue: " + scrambledWord);
     }
 
     void NASA()
     {
-        currentScreen = Screen.NASA;
-        arrayUsed = nasa;
-        arrayUsedLen = nasa.Length;
+        currentScreen = Screen.NatDef;
+        arrayUsed = natdef;
+        arrayUsedLen = natdef.Length;
 
         WordScrambler();
 
         Terminal.ClearScreen();
-        Terminal.WriteLine("Level 3 - NASA");
-        Terminal.WriteLine("Password: " + scrambledWord);
+        Terminal.WriteLine("Level 3 - Department for Defences");
+        Terminal.WriteLine("Clue: " + scrambledWord);
     }
 
 }
