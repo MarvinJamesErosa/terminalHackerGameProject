@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -17,9 +18,9 @@ public class GameScript : MonoBehaviour
     string scrambledWord; //  To store the scrambled word
 
     // Word Set for each level
-    string[] university = { "exam", "dean", "book", "Class" };
-    string[] corporate = { "", "handcuffs", "holster", "uniform", "arrest" };
-    string[] natdef = { "missile", "weapons", "general", "exploration", "astronauts" };
+    string[] university = { "exam", "dean", "book", "class" };
+    string[] corporate = { "finance", "growth", "culture", "planning", "manager" };
+    string[] natdef = { "missiles", "strategy", "generals", "discipline", "tacticians" };
 
     void Start()
     {
@@ -35,16 +36,8 @@ public class GameScript : MonoBehaviour
     void ShowMainMenu()
     {
         currentScreen = Screen.MainMenu;
-        Terminal.ClearScreen();
-        Terminal.WriteLine("Hello " + userName + ",");
-        Terminal.WriteLine("");
-        Terminal.WriteLine("What would you like to hack into?");
-        Terminal.WriteLine("Press 1 for Blarvard University");
-        Terminal.WriteLine("Press 2 for Shmapple Inc.");
-        Terminal.WriteLine("Press 3 for Deparment of Defences");
-        Terminal.WriteLine("Type \"close\" to close the application");
-        Terminal.WriteLine("");
-        Terminal.WriteLine("Enter your Selection:");
+        StartCoroutine(MenuEnum());
+
     }
 
     // For getting user input
@@ -68,7 +61,7 @@ public class GameScript : MonoBehaviour
 
         else if (input == "3" & currentScreen == Screen.MainMenu)
         {
-            NASA();
+            NatDef();
         }
 
         else if (input == "menu")
@@ -119,39 +112,140 @@ public class GameScript : MonoBehaviour
 
     void ShowWinScreen(string answer)
     {
-        if (answer == selectedWord)
+        if (answer == selectedWord & currentScreen == Screen.University )
         {
-            Terminal.ClearScreen();
-            Terminal.WriteLine("Congrats on beating the terminal hackergame! Your coding and logical skills areimpressive, and your dedication has paidoff. Keep up the great work and may you continue to succeed in all your future  endeavors. Well done!");
-            Terminal.WriteLine("");
-            Terminal.WriteLine("Type \"menu\" to go back");
+            StartCoroutine(UniversityEnumCongrats());
+        }
+        else if (answer == selectedWord & currentScreen == Screen.Corporate)
+        {
+            StartCoroutine(CorporateEnumCongrats());
+        }
+        else if (answer == selectedWord & currentScreen == Screen.NatDef)
+        {
+            StartCoroutine(NatDefEnumCongrats());
         }
         else
         {
-            string level = null;
             if (currentScreen == Screen.University)
             {
-                level = "Level 1 - Blarvard University";
                 Terminal.ClearScreen();
-                Terminal.WriteLine(level);
-                Terminal.WriteLine("Clue: " + scrambledWord);
+                Terminal.WriteLine("Changing IP Address...\n");
+                StartCoroutine(UniversityEnum(scrambledWord));
             }
             else if (currentScreen == Screen.Corporate)
             {
-                level = "Level 2 - Shmapple Inc.";
                 Terminal.ClearScreen();
-                Terminal.WriteLine(level);
-                Terminal.WriteLine("Clue: " + scrambledWord);
+                Terminal.WriteLine("Changing IP Address...\n");
+                StartCoroutine(CorporateEnum(scrambledWord));
             }
             else if (currentScreen == Screen.NatDef)
             {
-                level = "Level 3 - Department of Defences";
                 Terminal.ClearScreen();
-                Terminal.WriteLine(level);
-                Terminal.WriteLine("Clue: " + scrambledWord);
+                Terminal.WriteLine("Changing IP Address...\n");
+                StartCoroutine(NatDefEnum(scrambledWord));
             }
             
         }
+    }
+    IEnumerator MenuEnum()
+    {
+        Terminal.ClearScreen();
+        Terminal.WriteLine("Hello " + userName + "," + "\n");
+        yield return new WaitForSeconds(1);
+        Terminal.WriteLine("What would you like to hack into?");
+        Terminal.WriteLine("Press 1 for Blarvard University");
+        Terminal.WriteLine("Press 2 for Shmapple Inc.");
+        Terminal.WriteLine("Press 3 for Deparment of Defences");
+        Terminal.WriteLine("Type \"close\" to go back.\n");
+        yield return new WaitForSeconds(1);
+        Terminal.WriteLine("Enter your Selection:");
+    }
+    IEnumerator UniversityEnum(string word)
+    {
+        Terminal.WriteLine("~Blarvard University Login~\n");
+        yield return new WaitForSeconds(1);
+        Terminal.WriteLine("Executing Forget Password Script...\n");
+        yield return new WaitForSeconds(1);
+        Terminal.WriteLine("Forget Password Clue: " + word + "\n");
+        yield return new WaitForSeconds(1);
+        Terminal.WriteLine("Password: \n");
+    }
+    IEnumerator CorporateEnum(string word)
+    {
+        Terminal.WriteLine("~Shmapple Inc. Login~\n");
+        yield return new WaitForSeconds(1);
+        Terminal.WriteLine("Executing Forget Password Script...\n");
+        yield return new WaitForSeconds(1);
+        Terminal.WriteLine("Forget Password Clue: " + word + "\n");
+        yield return new WaitForSeconds(1);
+        Terminal.WriteLine("Password: \n");
+    }
+    IEnumerator NatDefEnum(string word)
+    {
+        Terminal.WriteLine("~Department of Defensor Login~\n");
+        yield return new WaitForSeconds(1);
+        Terminal.WriteLine("Executing Forget Password Script...\n");
+        yield return new WaitForSeconds(1);
+        Terminal.WriteLine("Forget Password Clue: " + word + "\n");
+        yield return new WaitForSeconds(1);
+        Terminal.WriteLine("Password: \n");
+    }
+    IEnumerator UniversityEnumCongrats()
+    {
+        Terminal.ClearScreen();
+        Terminal.WriteLine("Connecting to server...\n");
+        yield return new WaitForSeconds(2);
+        Terminal.WriteLine("Verifying login credentials...\n");
+        yield return new WaitForSeconds(2);
+        Terminal.WriteLine("Login successful!\n");
+        yield return new WaitForSeconds(2);
+        Terminal.WriteLine("Welcome back, Professor " + userName + "!\n");
+        yield return new WaitForSeconds(2);
+        Terminal.WriteLine("Executing Change Grade Script...\n");
+        yield return new WaitForSeconds(2);
+        Terminal.WriteLine("Please wait while the system loads...\n");
+        yield return new WaitForSeconds(2);
+        Terminal.WriteLine("Script Loaded Successfully!\n");
+        yield return new WaitForSeconds(2);
+        Terminal.WriteLine("Type \"menu\" to go back.\n");
+    }
+    IEnumerator CorporateEnumCongrats()
+    {
+        Terminal.ClearScreen();
+        Terminal.WriteLine("Connecting to Shmapple Inc. server...\n");
+        yield return new WaitForSeconds(2);
+        Terminal.WriteLine("Verifying login credentials...\n");
+        yield return new WaitForSeconds(2);
+        Terminal.WriteLine("login successful!\n");
+        yield return new WaitForSeconds(2);
+        Terminal.WriteLine("Welcome back, Sir " + userName + "!\n");
+        yield return new WaitForSeconds(2);
+        Terminal.WriteLine("Executing Get Iphony 25 Schematics Script...\n");
+        yield return new WaitForSeconds(2);
+        Terminal.WriteLine("Please wait while the system loads...\n");
+        yield return new WaitForSeconds(2);
+        Terminal.WriteLine("Script Loaded Successfully!\n");
+        yield return new WaitForSeconds(2);
+        Terminal.WriteLine("Type \"menu\" to go back.\n");
+    }
+    IEnumerator NatDefEnumCongrats()
+    {
+        Terminal.ClearScreen();
+        Terminal.WriteLine("Connecting to Department of Defensor server...\n");
+        yield return new WaitForSeconds(2);
+        Terminal.WriteLine("Verifying login credentials...\n");
+        yield return new WaitForSeconds(2);
+        Terminal.WriteLine("login successful!\n");
+        yield return new WaitForSeconds(2);
+        Terminal.WriteLine("Welcome back, General " + userName + "!\n");
+        yield return new WaitForSeconds(2);
+        Terminal.WriteLine("Executing Get Nuclear Launch Code Script...\n");
+        yield return new WaitForSeconds(2);
+        Terminal.WriteLine("Please wait while the system loads...\n");
+        yield return new WaitForSeconds(2);
+        Terminal.WriteLine("Script Loaded Successfully!\n");
+        yield return new WaitForSeconds(2);
+        Terminal.WriteLine("Type \"menu\" to go back.\n");
     }
     // Each Level Functions
     void University()
@@ -161,11 +255,9 @@ public class GameScript : MonoBehaviour
         arrayUsedLen = university.Length;
 
         WordScrambler();
-
         Terminal.ClearScreen();
-        Terminal.WriteLine("Level 1 - Blarvard University");
-        Terminal.WriteLine("Clue: " + scrambledWord);
-    }
+        StartCoroutine(UniversityEnum(scrambledWord));
+    }    
 
     void Corporate()
     {
@@ -174,23 +266,19 @@ public class GameScript : MonoBehaviour
         arrayUsedLen = corporate.Length;
 
         WordScrambler();
-
         Terminal.ClearScreen();
-        Terminal.WriteLine("Level 2 - Shmapple Inc.");
-        Terminal.WriteLine("Clue: " + scrambledWord);
+        StartCoroutine(CorporateEnum(scrambledWord));
     }
 
-    void NASA()
+    void NatDef()
     {
         currentScreen = Screen.NatDef;
         arrayUsed = natdef;
         arrayUsedLen = natdef.Length;
 
         WordScrambler();
-
         Terminal.ClearScreen();
-        Terminal.WriteLine("Level 3 - Department for Defences");
-        Terminal.WriteLine("Clue: " + scrambledWord);
+        StartCoroutine(NatDefEnum(scrambledWord));
     }
 
 }
